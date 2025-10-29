@@ -37,3 +37,4 @@ for (Location in locations) {
   # Add legend
   legend("bottomright", legend = scenarios, col = colors, lwd = 2)
 }
+
