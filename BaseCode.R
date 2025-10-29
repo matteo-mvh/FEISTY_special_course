@@ -17,7 +17,7 @@ results_dir <- "C:/Users/Mmm/OneDrive/Master Studies/3. Semester/Carbon Sequeste
 # Load necessary library
 library(FEISTY)
 setwd("C:/Users/Mmm/OneDrive/Master Studies/3. Semester/Carbon Sequesteration/Code")
-source('FEISTY_carbon.R')
+source('scripts/FEISTY_carbon.R')
 
 # Define common loop settings (shared across all runs)
 loop_settings <- list(
@@ -165,4 +165,5 @@ print(paste("All simulations completed and results saved in:",
             file.path(results_dir, "FEISTY_Simulations_Results.RData")))
 
 # End of script
+
 
