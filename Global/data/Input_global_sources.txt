@@ -1,0 +1,86 @@
+Each grid cell has an estimate of the pelagic Tp (0-100m), 
+mid-water Tm (500-1500m) and bottom temperature Tb, 
+seafloor depth, euphotic depth (photic), small (szprod) and 
+large zooplankton (lzprod) production and 
+detrital flux reaching the seafloor (dfbot).
+
+Input data is representative of the early 1990s.
+
+------------------------------------------------------------------------------------
+Water temperature
+------------------------------------------------------------------------------------
+The water column temperature (average temperature for 2005-2017) estimates are taken 
+from the World Ocean Atlas 2018 at a 1° grid (Locarnini et al., 2018). 
+The temperature estimates are used to derive a pelagic, mid-water and bottom temperature
+
+reference: Locarnini, R. A., Mishonov, A. V, Baranova, O. K., Boyer, T. P., Zweng, M. M., 
+Garcia, H. E., Reagan, J. R., Seidov, D., Weathers, K., Paver, C. R., & Smolyar, I. (2018). 
+World Ocean Atlas 2018, Volume 1: Temperature. In A. Mishonov Technical Ed.; NOAA Atlas 
+NESDIS 81, 52 pp.
+
+
+------------------------------------------------------------------------------------
+Detrital flux reaching the seafloor & seafloor depth
+------------------------------------------------------------------------------------
+gfdl-ESM2.6-COBALT (Stock et al. 2014, 2017)
+
+
+------------------------------------------------------------------------------------
+Euphotic depth
+------------------------------------------------------------------------------------
+The euphotic depth is estimated using average daily surface chlorophyll a concentrations 
+(mg chlorophyll a m–3 d–1) from the Sea-viewing Wide Field-of-view Sensor between 1998 and 
+2008 (https://oceancolor.gsfc.nasa.gov/data/seawifs/) and the relationships of Morel 
+and Berthon (1989): 𝑧eu=568.2 · 𝐶tot^−0.746 where Ctot, the total chlorophyll a content 
+in the euphotic water column, is estimated from surface chlorophyll a 
+concentrations (Csur) as 𝐶tot= 40.6 · 𝐶sur^0.459.
+
+Reference: Morel, A., & Berthon, J. F. (1989). Surface pigments, algal biomass profiles, 
+and potential production of the euphotic layer: Relationships reinvestigated in view of remote-sensing 
+applications. Limnology and Oceanography, 34(8), 1545–1562. https://doi.org/10.4319/lo.1989.34.8.1545
+
+------------------------------------------------------------------------------------
+Small and large zooplankton production
+------------------------------------------------------------------------------------
+gfdl-ESM2.6-COBALT (Stock et al. 2014, 2017)
+
+The parameterization of small and large zooplankton production is based on output of GFDL’s 
+Carbon, Ocean Biogeochemistry and Lower Trophics (COBALT) ecosystem model from a climatology 
+of the global earth system model (ESM2.6) representative of the early 1990s 
+(Stock et al., 2014, 2017). The ESM2.6-COBALT model, which is described and evaluated in Stock et 
+al. (2017), has an ocean resolution of 1/10°. The output is coarsened to a 1° grid for use in this 
+application. The COBALT model includes three different size groups of zooplankton: microzooplankton 
+(< 200 μm), zooplankton representing small to medium sized copepods (0.2–2.0 mm) and zooplankton 
+representing large copepods and krill (2.0–20 mm). Fish mainly eat the two larger size groups 
+and mortality from predation by fish and other predators (not modeled within COBALT) is parameterized 
+with a density dependent closure term. This closure term represents the loss of energy to higher 
+predators in g C m-2 y-1, which we converted to g wet weight m-2 y-1 assuming a wet weight to carbon 
+ratio of 9:1.
+
+Fish larvae in FEISTY are unable to top-down control small zooplankton prey. As not much is eaten by the 
+fish larvae, we assume that the maximum production of small zooplankton (r · Rmax) at each grid cell 
+equals the loss of small zooplankton to higher predators from the ESM2.6-COBALT model.
+
+Such an assumption does not work for large zooplankton that are more top-down controlled by fish. 
+For that reason, we use the ESM2.6-COBALT estimate of large zooplankton loss to predators at each 
+grid cell to predict the “most likely” maximum zooplankton production (r ·Rmax). 
+To do this, we first estimate the ratio between maximum production and the loss of energy to 
+fish predators in the fish model for different temperatures. We find that the average ratio 
+between loss to fish predators and maximum production is 0.91 at 30°C, 0.89 at 20°C, 
+0.85 at 10°C and 0.78 at 0°C. We afterwards estimate maximum large zooplankton 
+production at each grid cell using the temperature-specific ratios, 
+ESM2.6-COBALT output of large zooplankton loss to predators and ESM2.6-COBALT average temperature 
+estimates of the first 100-meter water column.
+
+References: 
+Stock, C. A., Dunne, J. P., & John, J. G. (2014). Global-scale carbon and energy flows through the 
+marine planktonic food web: an analysis with a coupled physical–biological model. 
+Progress in Oceanography, 120, 1–28. https://doi.org/10.1016/j.pocean.2013.07.001
+
+Stock, C. A., John, J. G., Rykaczewski, R. R., Asch, R. G., Cheung, W. W. L., Dunne, J. P., Friedland, K. D., 
+Lam, V. W. Y., Sarmiento, J. L., & Watson, R. A. (2017). Reconciling fisheries catch and ocean productivity. 
+Proceedings of the National Academy of Sciences, 114(8), E1441–E1449. https://doi.org/10.1073/pnas.1610238114
+
+
+
+
