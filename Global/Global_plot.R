@@ -10,7 +10,7 @@ library(rnaturalearthdata)
 library(dplyr)
 
 # Load the saved FEISTY output
-load("data/Global_fish_biomass.RData")  # loads 'out'
+load("data/Global_fish_biomass_No_Fishing.RData")  # loads 'out'
 
 # Make sure numeric columns are numeric
 out$lon <- as.numeric(out$lon)
@@ -40,3 +40,4 @@ plot_global(points_sf, "totB_all", "Total Fish Biomass (g/m²)")
 
 # Plot carbon injection
 plot_global(points_sf, "carbon_inject", "Carbon Injection (g C/m²)")
+
