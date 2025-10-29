@@ -35,4 +35,4 @@ Key features include:
 
 1. Clone the repository:  
    ```bash
-   git clone https://github.com/yourusername/FEISTY_special_course.git
+   git clone 'https://github.com/matteo-mvh/FEISTY_special_course.git'
