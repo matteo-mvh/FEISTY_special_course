@@ -44,9 +44,7 @@ simulateFEISTY_single <- function(rowidx, glob, Fmax1, etaF1, groupidx1, Fmax2, 
 
 # Loop over all fishing scenarios
 for (list_idx in seq_along(fishing_scenarios)) {
-  
   scenario <- fishing_scenarios[[list_idx]]
-  
   Fmax1     <- scenario$Fmax1
   etaF1     <- scenario$etaF1
   groupidx1 <- scenario$groupidx1
@@ -55,9 +53,17 @@ for (list_idx in seq_along(fishing_scenarios)) {
   groupidx2 <- scenario$groupidx2
   
   all_results <- list()
+  cat(sprintf("Starting scenario: %s (%d rows total)\n", scenario$name, nrow(glob)))
+  flush.console()
   
   for (rowidx in 1:nrow(glob)) {
     sim <- simulateFEISTY_single(rowidx, glob, Fmax1, etaF1, groupidx1, Fmax2, etaF2, groupidx2)
+    
+    if (rowidx %% ceiling(nrow(glob) / 10) == 0) {
+      cat(sprintf("Progress: %d%% complete (%d of %d rows)\n",
+                  round(100 * rowidx / nrow(glob)), rowidx, nrow(glob)))
+      flush.console()
+    }
     
     sime <- calcCarbonFluxes(sim)
     inject <- calcCarbonInjection(sime)
@@ -74,16 +80,17 @@ for (list_idx in seq_along(fishing_scenarios)) {
     all_results[[rowidx]] <- res
   }
   
-  # Create output data frame
   out <- t(data.frame(matrix(data = unlist(all_results), nrow = 9)))
   colnames(out) <- c("lon", "lat", "totB_smpel", "totB_mesopel", 
                      "totB_largepel", "totB_midwpred", "totB_dem", "totB_all", "carbon_inject")
   out <- as.data.frame(out)
   
-  # Save RData with scenario name
   file_rdata <- paste0("data/Global_fish_biomass_", scenario$name, ".RData")
   save(out, file = file_rdata)
   
   cat("✅ Finished scenario:", scenario$name, "\n")
+  flush.console()
 }
+
+
 
