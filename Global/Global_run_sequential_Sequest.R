@@ -6,7 +6,10 @@ library(FEISTY)
 
 setwd('C:/Users/Mmm/OneDrive/Master Studies/3. Semester/Carbon Sequesteration/FEISTY_special_course/Global')
 source('scripts/FEISTY_carbon.R')
-TM = loadTransportMatrix(sFilename="data/CTL.R")
+
+# Load global data
+glob <- read.csv(file = "data/Input_global.csv")
+load("data/TM_grid.RData") 
 
 # Fishing Parameters
 fishing_scenarios <- list(
@@ -22,9 +25,6 @@ fishing_scenarios <- list(
   list(name = 'Large_Pelagic',Fmax1 = 0.3, etaF1 = 0.05, groupidx1 = c(3), 
        Fmax2 = 0.0, etaF2 = 0.05, groupidx2 = c(5))
 )
-
-# Load global forcing data
-glob <- read.csv(file = "data/Input_global.csv")
 
 # Function to run FEISTY for one row
 simulateFEISTY_single <- function(rowidx, glob, Fmax1, etaF1, groupidx1, Fmax2, etaF2, groupidx2) {
@@ -76,13 +76,11 @@ for (list_idx in seq_along(fishing_scenarios)) {
     inject <- calcCarbonInjection(sime)
     inject$total_sum <- sum(inject$total)
     
-    injectTM = project_injection_to_TM(inject, lat, longitude_correction(lon), TM) 
+    injectTM = project_injection_to_TM(inject, lat, longitude_correction(lon), TM_grid) 
     
     # Assemble a matrix with all injections
-    matrixInject = array(dim=dim(TM$M3d), data=0)
+    matrixInject = array(dim=c(91,180,24), data=0)
     matrixInject[injectTM$ix$y, injectTM$ix$x, ] = injectTM$inject
-    
-    sequestration <- calc_CarbonSequestration(TM, matrixInject)
     
     
     res <- list(
@@ -91,7 +89,7 @@ for (list_idx in seq_along(fishing_scenarios)) {
       Biomass = colMeans(sim$totBiomass[round(0.6 * sim$nTime):sim$nTime, ]),
       totBiomass = sum(colMeans(sim$totBiomass[round(0.6 * sim$nTime):sim$nTime, ])),
       inject = inject$total_sum,
-      sequestration
+      matrixInject
     )
     
     all_results[[rowidx]] <- res
