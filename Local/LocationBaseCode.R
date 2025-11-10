@@ -12,11 +12,11 @@
 # -----------------------------------------------------------------------------
 
 # Set results directory
-results_dir <- "C:/Users/Mmm/OneDrive/Master Studies/3. Semester/Carbon Sequesteration/Code/results_files"
+results_dir <- "C:/Users/Mmm/OneDrive/Master Studies/3. Semester/Carbon Sequesteration/FEISTY_special_course/Local/results_files"
 
 # Load necessary library
 library(FEISTY)
-setwd("C:/Users/Mmm/OneDrive/Master Studies/3. Semester/Carbon Sequesteration/Code")
+setwd("C:/Users/Mmm/OneDrive/Master Studies/3. Semester/Carbon Sequesteration/FEISTY_special_course/Local")
 source('scripts/FEISTY_carbon.R')
 
 # Define common loop settings (shared across all runs)
@@ -51,8 +51,8 @@ fishing_scenarios <- list(
   list(name = 'Demersal'     ,Fmax1 = 0.3, etaF1 = 0.05, groupidx1 = c(5), 
                               Fmax2 = 0.0, etaF2 = 0.05, groupidx2 = c(1)),
   
-  list(name = 'Forage Fish'  ,Fmax1 = 0.3, etaF1 = 0.05, groupidx1 = c(5), 
-                              Fmax2 = 0.6, etaF2 = 0.05, groupidx2 = c(1)),
+  list(name = 'Forage Fish'  ,Fmax1 = 1.5, etaF1 = 0.025, groupidx1 = c(5), 
+                              Fmax2 = 3   , etaF2 = 0.025, groupidx2 = c(1)),
   
   list(name = 'Large Pelagic',Fmax1 = 0.3, etaF1 = 0.05, groupidx1 = c(3), 
                               Fmax2 = 0.0, etaF2 = 0.05, groupidx2 = c(5))
@@ -64,6 +64,12 @@ valid_combos <- list(
   "Slope"      = c("No Fishing", "Demersal", "Forage Fish", "Large Pelagic"),
   "Open Ocean" = c("No Fishing",             "Forage Fish"                 )
 )
+
+
+valid_combos <- list(
+  "Slope"      = c("No Fishing", "Forage Fish")
+)
+
 
 # Initialize a list to store simulations
 sim_results   <- list()

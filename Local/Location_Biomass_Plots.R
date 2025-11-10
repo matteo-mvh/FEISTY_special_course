@@ -190,8 +190,9 @@ plot_biomass_changes <- function() {
 
 #plot_no_fishing()
 #plot_biomass_changes()
-#plotNetwork(sim_results[["Shelf Sea"]][["No Fishing"]])
-#plotNetwork(sim_results[["Open Ocean"]][["No Fishing"]])
+plotRates(sim_results[["Slope"]][["No Fishing"]])
+plotNetwork(sim_results[["Slope"]][["No Fishing"]])
+plotNetwork(sim_results[["Slope"]][["Forage Fish"]])
 #plot_changes("Shelf Sea")
 #plot_changes("Slope")
 #plot_changes("Open Ocean")

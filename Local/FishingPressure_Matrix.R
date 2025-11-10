@@ -22,8 +22,13 @@ setwd("C:/Users/Mmm/OneDrive/Master Studies/3. Semester/Carbon Sequesteration/FE
 source('scripts/FEISTY_carbon.R')
 
 # Define Fmax and etaF value ranges
+<<<<<<< HEAD
 Fmax_values <- seq(0, 1, by = 0.1)
 etaF_values <- seq(0, 0.5, by = 0.025)
+=======
+Fmax_values <- seq(0, 2, by = 0.1)
+etaF_values <- seq(0, 0.5, by = 0.1)
+>>>>>>> de11c71 (updated the local folder)
 
 # Create result lists before loops
 avg_Biomass   <- list()
@@ -57,6 +62,7 @@ locations <- list(
 fishing_scenarios <- list(
   list(name = 'Demersal'     , groupidx1 = c(5), groupidx2 = c(5)),
   list(name = 'Forage Fish'  , groupidx1 = c(1), groupidx2 = c(5)),
+<<<<<<< HEAD
   list(name = 'Large Pelagic', groupidx1 = c(3), groupidx2 = c(3))
 )
 
@@ -65,6 +71,22 @@ valid_combos <- list(
   "Shelf Sea"  = c("Demersal", "Forage Fish"),
   "Slope"      = c("Demersal", "Forage Fish", "Large Pelagic"),
   "Open Ocean" = c("Forage Fish")
+=======
+  list(name = 'Large Pelagic', groupidx1 = c(3), groupidx2 = c(3)),
+  list(name = 'All Fish'     , groupidx1 = c(1,2,3,4,5), groupidx2 = c(1,2,3,4,5))
+  )
+
+# --- Define valid combinations ----------------------------------------------
+valid_combos <- list(
+  "Shelf Sea"  = c("Demersal", "Forage Fish",                 "All Fish"),
+  "Slope"      = c("Demersal", "Forage Fish", "Large Pelagic","All Fish"),
+  "Open Ocean" = c(            "Forage Fish",                 "All Fish")
+)
+
+
+valid_combos <- list(
+  "Slope"      = c("All Fish")
+>>>>>>> de11c71 (updated the local folder)
 )
 
 # --- Main simulation loop ----------------------------------------------------
@@ -125,7 +147,8 @@ for (loc in locations) {
         # Apply fishing pressure
         p <- setFishing(p, Fmax = Fmax, etaF = etaF, groupidx = fish$groupidx1)
         if (!identical(fish$groupidx1, fish$groupidx2)) {
-          p <- setFishing(p, Fmax = 2 * max, etaF = etaF, groupidx = fish$groupidx2)
+
+          p <- setFishing(p, Fmax = 2 * Fmax, etaF = etaF, groupidx = fish$groupidx2)
         }
         
         # Run simulation safely

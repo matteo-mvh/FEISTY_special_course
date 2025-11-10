@@ -14,6 +14,7 @@ fish_names <- names(avg_Biomass[[1]])
 loc_to_plot  <- loc_names[1]        # first location
 fish_to_plot <- fish_names[3]       # first fish group
 
+
 biomass_matrix <- avg_Biomass[[loc_to_plot]][[fish_to_plot]]
 inject_matrix  <- carbon_inject[[loc_to_plot]][[fish_to_plot]]
 
@@ -23,6 +24,7 @@ inject_matrix  <- carbon_inject[[loc_to_plot]][[fish_to_plot]]
 # Replace these with your actual sequences
 Fmax_values <- seq(0, 1, length.out = nrow(biomass_matrix))
 etaF_values <- seq(0, 0.2, length.out = ncol(biomass_matrix))
+
 
 # ============================================================
 # Convert matrices to data frames with Fmax and etaF
