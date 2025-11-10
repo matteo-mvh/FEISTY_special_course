@@ -1,33 +1,53 @@
 # FEISTY Special Course
 
-**FEISTY_special_course** is a repository for exploring marine ecosystem dynamics using the **FEISTY model**. The repository is structured into two main components: **Local** and **Global**.
+**FEISTY_special_course** explores marine ecosystem dynamics and the **impact of fishing on the biological carbon pump** using the **FEISTY model**.  
+The repository is divided into two main components: **Local** and **Global**, which together bridge small-scale ecosystem understanding and global-scale carbon impact assessment.
 
 ---
 
 ## Repository Structure
 
-### 1. Local
-The **Local** section focuses on **specific locations** to analyze theoretical concepts and potential outcomes.  
-Key features include:  
-- Targeted study areas such as **Shelf Sea**, **Slope**, and **Open Ocean**.  
-- Exploration of different **fishing scenarios** and their effects on local ecosystems.  
-- Useful for understanding dynamics at a smaller, controlled scale before scaling up globally.  
+### 🐟 Local
+The **Local** section focuses on **specific marine regions** to study ecosystem processes and fishing impacts under controlled conditions.  
+It includes three ecosystems differing in **depth** and **productivity**:
 
-### 2. Global
-The **Global** section runs the FEISTY model at a **global scale** to assess larger patterns and trends.  
-Key features include:  
-- Simulation across all ocean regions using **global forcing datasets**.  
-- Investigation of total biomass, carbon fluxes, and ecosystem responses under various fishing scenarios.  
-- Provides a broad picture of marine ecosystem dynamics and global impacts of fishing.
+- **Shelf Sea (75 m)** – highly productive, dominated by demersal and forage fish.  
+- **Slope (1500 m)** – intermediate depth with mixed trophic interactions.  
+- **Open Ocean (3000 m)** – low productivity, limited biomass.
+
+**Objectives**
+- Explore equilibrium **biomass distribution** and **food-web structure** at local scales.  
+- Test the effects of **size-selective and targeted fishing** (demersal, forage, large pelagic).  
+- Estimate **carbon injection potential** for different fishing scenarios.  
+
+**Outputs**
+- Equilibrium **biomass** per size class and depth.  
+- **Carbon injection** by fishing type and its **difference to the baseline**.  
+- Visuals showing **biomass shifts** and **carbon export efficiency**.
+
+---
+
+### 🌍 Global
+The **Global** section runs FEISTY at a **planetary scale**, integrating environmental forcing data and a **Global Transport Matrix** to link biological production with carbon storage.
+
+**Objectives**
+- Quantify **total global biomass** and **carbon fluxes**.  
+- Assess the **global effects of fishing** on carbon sequestration.  
+- Combine biological and physical models to evaluate **long-term carbon storage**.
+
+**Outputs**
+- **Global biomass maps** and **fishing response** visualizations.  
+- **Carbon injection and sequestration estimates** per fishing scenario.  
+- Aggregated plots showing **differences from unfished baseline** conditions.
 
 ---
 
 ## Key Features
 
-- Sequential and scalable **FEISTY simulations**.  
-- Calculation of **fish biomass** and **carbon injection**.  
-- Flexible setup to test multiple **fishing scenarios**.  
-- Data output ready for **visualization** and **analysis**.
+- Modular and scalable **FEISTY simulations** (Local → Global).  
+- Integration of **size-structured fishing** and **ecosystem depth variation**.  
+- Calculation of **biomass**, **carbon injection**, and **carbon sequestration**.  
+- Outputs formatted for **visualization** and **further data analysis**.  
 
 ---
 
@@ -35,4 +55,4 @@ Key features include:
 
 1. Clone the repository:  
    ```bash
-   git clone 'https://github.com/matteo-mvh/FEISTY_special_course.git'
+   git clone https://github.com/matteo-mvh/FEISTY_special_course.git
