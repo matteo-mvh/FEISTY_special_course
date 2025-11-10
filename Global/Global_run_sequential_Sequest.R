@@ -4,12 +4,14 @@
 
 library(FEISTY)
 
-setwd('C:/Users/Mmm/OneDrive/Master Studies/3. Semester/Carbon Sequesteration/FEISTY_special_course/Global')
+setwd("/zhome/4d/6/214029/FEISTY_special_course/Global")
+
 source('scripts/FEISTY_carbon.R')
 
 # Load global data
 glob <- read.csv(file = "data/Input_global.csv")
 load("data/TM_grid.RData") 
+print("Data was successfully loaded")
 
 # Fishing Parameters
 fishing_scenarios <- list(
@@ -64,7 +66,7 @@ for (list_idx in seq_along(fishing_scenarios)) {
     lon = glob[rowidx, "lon"]
     lat = glob[rowidx, "lat"]
     
-    sim <- simulateFEISTY_single(rowidx, glob, Fmax1, etaF1, groupidx1, Fmax2, etaF2, groupidx2)
+    sim = simulateFEISTY_single(rowidx, glob, Fmax1, etaF1, groupidx1, Fmax2, etaF2, groupidx2)
     
     if (rowidx %% ceiling(nrow(glob) / 10) == 0) {
       cat(sprintf("Progress: %d%% complete (%d of %d rows)\n",
@@ -88,8 +90,7 @@ for (list_idx in seq_along(fishing_scenarios)) {
       lat,
       Biomass = colMeans(sim$totBiomass[round(0.6 * sim$nTime):sim$nTime, ]),
       totBiomass = sum(colMeans(sim$totBiomass[round(0.6 * sim$nTime):sim$nTime, ])),
-      inject = inject$total_sum,
-      matrixInject
+      inject = inject$total_sum
     )
     
     all_results[[rowidx]] <- res
@@ -101,7 +102,7 @@ for (list_idx in seq_along(fishing_scenarios)) {
   out <- as.data.frame(out)
   
   file_rdata <- paste0("data/Global_fish_biomass_", scenario$name, ".RData")
-  save(out, file = file_rdata)
+  save(out, matrixInject, file = file_rdata)
   
   cat("✅ Finished scenario:", scenario$name, "\n")
   flush.console()
