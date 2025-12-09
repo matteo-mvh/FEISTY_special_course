@@ -1,0 +1,118 @@
+# ----------------------------------------
+# Global run of FEISTY for all fishing scenarios
+# ----------------------------------------
+
+library(FEISTY)
+
+#setwd("/zhome/4d/6/214029/FEISTY_special_course/Global")
+setwd("C:/Users/Mmm/OneDrive/Master Studies/3. Semester/Carbon Sequesteration/FEISTY_special_course/Global")
+
+source('scripts/FEISTY_carbon.R')
+
+# Load global data
+glob <- read.csv(file = "data/Input_global.csv")
+print("Data was successfully loaded")
+
+# ----------------------------------------
+# Pre-extract all columns once (MUCH faster)
+# ----------------------------------------
+lon_vec    <- glob$lon
+lat_vec    <- glob$lat
+szprod_vec <- glob$szprod
+lzprod_vec <- glob$lzprod
+dfbot_vec  <- glob$dfbot
+photic_vec <- glob$photic
+depth_vec  <- glob$depth
+Tp_vec     <- glob$Tp
+Tm_vec     <- glob$Tm
+Tb_vec     <- glob$Tb
+
+nrows <- nrow(glob)
+
+# Fishing Parameters
+fishing_scenarios <- list(
+  list(name = 'No_Fishing'   ,Fmax1 = 0.3, etaF1 = 0.05, groupidx1 = c(1,3,5), 
+       Fmax2 = 0.0, etaF2 = 0.05, groupidx2 = c(1)),
+  
+  list(name = 'Forage_Fish'  ,Fmax1 = 0.6, etaF1 = 0.05, groupidx1 = c(1,5), 
+       Fmax2 = 0.3, etaF2 = 0.05, groupidx2 = c(3)),
+  
+  list(name = 'Large_Pelagic',Fmax1 = 0.3, etaF1 = 0.05, groupidx1 = c(1,5), 
+       Fmax2 = 0.6, etaF2 = 0.05, groupidx2 = c(3))
+)
+
+# ----------------------------------------
+# Function to run FEISTY for one row
+# ----------------------------------------
+simulateFEISTY_single <- function(i, Fmax1, etaF1, groupidx1, Fmax2, etaF2, groupidx2) {
+  
+  p_sim <- setupVertical2(
+    szprod = szprod_vec[i],
+    lzprod = lzprod_vec[i],
+    dfbot  = dfbot_vec[i],
+    photic = photic_vec[i],
+    depth  = depth_vec[i],
+    Tp     = Tp_vec[i],
+    Tm     = Tm_vec[i],
+    Tb     = Tb_vec[i]
+  )
+  
+  # Apply both fishing layers
+  p_sim <- setFishing(p_sim, Fmax = Fmax1, etaF = etaF1, groupidx = groupidx1)
+  p_sim <- setFishing(p_sim, Fmax = Fmax2, etaF = etaF2, groupidx = groupidx2)
+  
+  sim <- simulateFEISTY(p = p_sim, tEnd = 300)
+  sim
+}
+
+# ----------------------------------------
+# MAIN LOOP OVER FISHING SCENARIOS
+# ----------------------------------------
+for (scenario in fishing_scenarios) {
+  
+  # Extract scenario parameters ONCE
+  Fmax1     <- scenario$Fmax1
+  etaF1     <- scenario$etaF1
+  groupidx1 <- scenario$groupidx1
+  Fmax2     <- scenario$Fmax2
+  etaF2     <- scenario$etaF2
+  groupidx2 <- scenario$groupidx2
+  
+  # Preallocate list (fast!)
+  all_results <- vector("list", nrows)
+  
+  for (i in 1:nrows) {
+    
+    sim <- simulateFEISTY_single(i, Fmax1, etaF1, groupidx1, Fmax2, etaF2, groupidx2)
+    
+    # Compute biomass once
+    t_idx <- round(0.6 * sim$nTime):sim$nTime
+    totBiomass <- sum(colMeans(sim$totBiomass[t_idx, ]))
+    
+    # Carbon flux
+    sime   <- calcCarbonFluxes(sim)
+    inject <- calcCarbonInjection(sime)
+    totinject <- sum(inject$total)
+    
+    # Save row result
+    all_results[[i]] <- list(
+      lon           = lon_vec[i],
+      lat           = lat_vec[i],
+      totB_all      = totBiomass,
+      carbon_inject = totinject,
+      eta_pump      = 9 * totinject / totBiomass
+    )
+    
+    # Progress every 10%
+    if (i %% ceiling(nrows / 10) == 0) {
+      cat("Progress:", round(100 * i / nrows), "% (", i, "of", nrows, ")\n")
+    }
+  }
+  
+  # Convert list → dataframe
+  out <- do.call(rbind, lapply(all_results, as.data.frame))
+  
+  cat("\n\n--------------------------------\n")
+  cat(" Finished scenario:", scenario$name, "\n")
+  cat("--------------------------------\n\n")
+}

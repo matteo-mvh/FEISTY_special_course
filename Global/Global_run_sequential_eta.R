@@ -1,0 +1,92 @@
+# ----------------------------------------
+# Global run of FEISTY for all fishing scenarios
+# ----------------------------------------
+
+library(FEISTY)
+
+#setwd("/zhome/4d/6/214029/FEISTY_special_course/Global")
+setwd("C:/Users/Mmm/OneDrive/Master Studies/3. Semester/Carbon Sequesteration/FEISTY_special_course/Global")
+
+source('scripts/FEISTY_carbon.R')
+
+# Load global data
+glob <- read.csv(file = "data/Input_global.csv")
+print("Data was successfully loaded")
+
+# Fishing Parameters
+fishing_scenarios <- list(
+  list(name = 'No_Fishing'   ,Fmax1 = 0.3, etaF1 = 0.05, groupidx1 = c(1,3,5), 
+                              Fmax2 = 0.0, etaF2 = 0.05, groupidx2 = c(1)),
+ 
+  list(name = 'Forage_Fish'  ,Fmax1 = 0.6, etaF1 = 0.05, groupidx1 = c(1,5), 
+                              Fmax2 = 0.3, etaF2 = 0.05, groupidx2 = c(3)),
+  
+  list(name = 'Large_Pelagic',Fmax1 = 0.3, etaF1 = 0.05, groupidx1 = c(1,5), 
+                              Fmax2 = 0.6, etaF2 = 0.05, groupidx2 = c(3))
+)
+
+# Function to run FEISTY for one row
+simulateFEISTY_single <- function(rowidx, glob, Fmax1, etaF1, groupidx1, Fmax2, etaF2, groupidx2) {
+  p_sim = setupVertical2(
+    szprod = glob[rowidx, "szprod"],
+    lzprod = glob[rowidx, "lzprod"],
+    dfbot  = glob[rowidx, "dfbot"],
+    photic = glob[rowidx, "photic"],
+    depth  = glob[rowidx, "depth"],
+    Tp     = glob[rowidx, "Tp"],
+    Tm     = glob[rowidx, "Tm"],
+    Tb     = glob[rowidx, "Tb"])
+  
+  p_sim = setFishing(p_sim, Fmax = Fmax1, etaF = etaF1, groupidx = groupidx1)
+  p_sim = setFishing(p_sim, Fmax = Fmax2, etaF = etaF2, groupidx = groupidx2)
+  
+  sim <- simulateFEISTY(p = p_sim,tEnd = 300)
+  return(sim)
+}
+
+# Loop over all fishing scenarios
+for (list_idx in seq_along(fishing_scenarios)) {
+  scenario <- fishing_scenarios[[list_idx]]
+  Fmax1     <- scenario$Fmax1
+  etaF1     <- scenario$etaF1
+  groupidx1 <- scenario$groupidx1
+  Fmax2     <- scenario$Fmax2
+  etaF2     <- scenario$etaF2
+  groupidx2 <- scenario$groupidx2
+  
+  all_results <- list()
+  
+  for (rowidx in 1:nrow(glob)) {
+    
+    lon = glob[rowidx, "lon"]
+    lat = glob[rowidx, "lat"]
+    
+    sim = simulateFEISTY_single(rowidx, glob, Fmax1, etaF1, groupidx1, Fmax2, etaF2, groupidx2)
+    
+    if (rowidx %% ceiling(nrow(glob) / 10) == 0) {
+      cat(sprintf("Progress: %d%% complete (%d of %d rows)\n",
+                  round(100 * rowidx / nrow(glob)), rowidx, nrow(glob)))
+      flush.console()
+    }
+    
+    sime <- calcCarbonFluxes(sim)
+    inject <- calcCarbonInjection(sime)
+    inject$total_sum <- sum(inject$total)
+    
+    totBiomass = sum(colMeans(sim$totBiomass[round(0.6 * sim$nTime):sim$nTime, ]))
+    totinject = inject$total_sum
+    
+    all_results[[rowidx]] <- list(
+      lon = lon,
+      lat = lat,
+      totB_all = totBiomass,
+      carbon_inject = totinject,
+      eta_pump = 9 * totinject / totBiomass
+    )
+}
+  
+  # SAFEST way to turn list → dataframe
+  out <- do.call(rbind, lapply(all_results, as.data.frame))
+  
+  cat("✅ Finished scenario:", scenario$name, "\n")
+  
