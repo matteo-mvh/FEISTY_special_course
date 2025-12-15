@@ -4,8 +4,8 @@
 
 library(FEISTY)
 
-#setwd("/zhome/4d/6/214029/FEISTY_special_course/Global")
-setwd("C:/Users/Mmm/OneDrive/Master Studies/3. Semester/Carbon Sequesteration/FEISTY_special_course/Global")
+setwd("/zhome/4d/6/214029/FEISTY_special_course/Global")
+#setwd("C:/Users/Mmm/OneDrive/Master Studies/3. Semester/Carbon Sequesteration/FEISTY_special_course/Global")
 
 source('scripts/FEISTY_carbon.R')
 
@@ -65,6 +65,8 @@ simulateFEISTY_single <- function(i, Fmax1, etaF1, groupidx1, Fmax2, etaF2, grou
   sim
 }
 
+# Container for all scenarios
+results_all_scenarios <- list()
 # ----------------------------------------
 # MAIN LOOP OVER FISHING SCENARIOS
 # ----------------------------------------
@@ -100,7 +102,8 @@ for (scenario in fishing_scenarios) {
       lat           = lat_vec[i],
       totB_all      = totBiomass,
       carbon_inject = totinject,
-      eta_pump      = 9 * totinject / totBiomass
+      eta_pump      = ifelse(totBiomass > 0, 9 * totinject / totBiomass, NA)
+      
     )
     
     # Progress every 10%
@@ -112,7 +115,18 @@ for (scenario in fishing_scenarios) {
   # Convert list → dataframe
   out <- do.call(rbind, lapply(all_results, as.data.frame))
   
+  # Store in master list (named by scenario)
+  results_all_scenarios[[scenario$name]] <- out
+  
   cat("\n\n--------------------------------\n")
   cat(" Finished scenario:", scenario$name, "\n")
   cat("--------------------------------\n\n")
 }
+
+dir.create("results", showWarnings = FALSE)
+save(
+  results_all_scenarios,
+  file = "results/FEISTY_global_fishing_scenarios.RData"
+)
+print("All scenarios completed and results saved.")
+# End of script
