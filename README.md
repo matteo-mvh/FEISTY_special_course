@@ -1,58 +1,105 @@
-# FEISTY Special Course
+# FEISTY Fishing & Carbon Model
 
-**FEISTY_special_course** explores marine ecosystem dynamics and the **impact of fishing on the biological carbon pump** using the **FEISTY model**.  
-The repository is divided into two main components: **Local** and **Global**, which together bridge small-scale ecosystem understanding and global-scale carbon impact assessment.
+> **Project type:** DTU University Research Project / Special Course  
+> **Field:** Marine ecosystem modelling · biological carbon pump · fisheries · numerical modelling  
+> **Tools:** FEISTY · MATLAB / numerical modelling
 
----
+## Overview
 
-## Repository Structure
+This project investigates how **fishing alters marine ecosystem structure and the biological carbon pump** using the FEISTY size-structured marine ecosystem model.
 
-### 🐟 Local
-The **Local** section focuses on **specific marine regions** to study ecosystem processes and fishing impacts under controlled conditions.  
-It includes three ecosystems differing in **depth** and **productivity**:
+The work combines local ecosystem experiments with global simulations to examine how changes in fish biomass, size structure and functional groups can influence the transport and long-term storage of carbon in the ocean.
 
-- **Shelf Sea (75 m)** – highly productive, dominated by demersal and forage fish.  
-- **Slope (1500 m)** – intermediate depth with mixed trophic interactions.  
-- **Open Ocean (3000 m)** – low productivity, limited biomass.
+The repository was developed as part of a **DTU special course in marine ecological modelling**.
 
-**Objectives**
-- Explore equilibrium **biomass distribution** and **food-web structure** at local scales.  
-- Test the effects of **size-selective and targeted fishing** (demersal, forage, large pelagic).  
-- Estimate **carbon injection potential** for different fishing scenarios.  
+## Research Questions
 
-**Outputs**
-- Equilibrium **biomass** per size class and depth.  
-- **Carbon injection** by fishing type and its **difference to the baseline**.  
-- Visuals showing **biomass shifts** and **carbon export efficiency**.
+The project focuses on questions such as:
 
----
+- How does fishing change fish biomass and food-web structure?
+- Do different fishing strategies produce different effects on carbon export?
+- How do these effects vary between shelf seas, slopes and the open ocean?
+- What is the potential global impact of fishing on biologically mediated carbon transport and storage?
 
-### 🌍 Global
-The **Global** section runs FEISTY at a **planetary scale**, integrating environmental forcing data and a **Global Transport Matrix** to link biological production with carbon storage.
+## Project Structure
 
-**Objectives**
-- Quantify **total global biomass** and **carbon fluxes**.  
-- Assess the **global effects of fishing** on carbon sequestration.  
-- Combine biological and physical models to evaluate **long-term carbon storage**.
+The repository is divided into two complementary components:
 
-**Outputs**
-- **Global biomass maps** and **fishing response** visualizations.  
-- **Carbon injection and sequestration estimates** per fishing scenario.  
-- Aggregated plots showing **differences from unfished baseline** conditions.
+```text
+FEISTY_special_course/
+├── Local/
+├── Global/
+└── README.md
+```
 
----
+### Local simulations
 
-## Key Features
+The `Local/` component investigates idealised ecosystems representing different marine environments:
 
-- Modular and scalable **FEISTY simulations** (Local → Global).  
-- Integration of **size-structured fishing** and **ecosystem depth variation**.  
-- Calculation of **biomass**, **carbon injection**, and **carbon sequestration**.  
-- Outputs formatted for **visualization** and **further data analysis**.  
+- **Shelf sea (~75 m)** – productive coastal ecosystem with strong demersal and forage-fish components
+- **Continental slope (~1500 m)** – intermediate-depth ecosystem
+- **Open ocean (~3000 m)** – deep, lower-productivity environment
 
----
+These simulations are used to understand mechanisms before moving to global-scale analysis.
 
-## Usage
+### Global simulations
 
-1. Clone the repository:  
-   ```bash
-   git clone https://github.com/matteo-mvh/FEISTY_special_course.git
+The `Global/` component applies FEISTY at global scale and combines ecosystem simulations with environmental forcing and ocean transport information.
+
+The objective is to evaluate whether fishing-induced changes in marine biomass can alter the amount and distribution of carbon transported into the ocean interior.
+
+## Fishing Scenarios
+
+The model is used to compare an unfished baseline with alternative fishing strategies, including fishing pressure targeting different ecological groups such as:
+
+- demersal fish
+- forage fish
+- large pelagic fish
+- size-selective fishing scenarios
+
+Changes are evaluated relative to the unfished ecosystem.
+
+## Main Outputs
+
+The simulations provide quantities including:
+
+- equilibrium fish biomass
+- biomass distribution among functional groups and size classes
+- food-web responses to fishing
+- fishing-induced carbon injection
+- differences relative to an unfished baseline
+- spatial patterns in global biomass and carbon fluxes
+- estimates of carbon sequestration associated with different scenarios
+
+## Modelling Approach
+
+The project follows a two-scale workflow:
+
+1. Explore ecological mechanisms using simplified local ecosystems.
+2. Compare ecosystem responses across depth and productivity regimes.
+3. Introduce alternative fishing scenarios.
+4. Quantify resulting changes in biomass and carbon transport.
+5. Extend the analysis to global FEISTY simulations.
+6. Combine biological carbon injection with ocean transport to investigate longer-term carbon storage.
+
+## Why This Project Matters
+
+Fish influence marine carbon cycling through feeding, respiration, mortality, vertical movement and the production of sinking organic material.
+
+Fishing therefore has the potential to affect not only fish stocks but also ecosystem-mediated carbon transport.
+
+This project explores that connection using a mechanistic ecosystem model and provides experience in:
+
+- marine ecosystem modelling
+- size-structured ecological models
+- fisheries impact analysis
+- biological carbon cycling
+- scenario analysis
+- large-scale environmental modelling
+- scientific data analysis and visualisation
+
+## Status
+
+Completed university special-course project.
+
+The repository contains research code developed for scientific exploration rather than a production software package.
